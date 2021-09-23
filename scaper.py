@@ -22,14 +22,12 @@ with open(USED_USERNAMES_PATH, "r+") as f:
 max_length = int(argv[1])
 
 
-def generate_candidates(candidates, prefix, chars_left):
+def generate_candidates(candidates, prefix, all_chars):
   if not prefix in used_usernames and not prefix in candidates:
     candidates.append(prefix)
-  if len(chars_left) > 0 and len(prefix) < max_length:
-    for c in chars_left:
-      chars_left.remove(c)
-      generate_candidates(candidates, prefix+c, chars_left)
-      chars_left.append(c)
+  if len(prefix) < max_length:
+    for c in all_chars:
+      generate_candidates(candidates, prefix+c, all_chars)
   return candidates
 
 
