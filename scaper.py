@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-from requests_html import HTMLSession
+import requests
 from sys import argv
 from os import path
 from time import sleep
 
-DELAY = 3  # Reduce rate limiting
 USED_USERNAMES_PATH = "./attempted_usernames.txt"
 
 if not (len(argv) == 3 and argv[1].isdigit()):
@@ -15,7 +14,7 @@ used_usernames = set()
 
 # Save state to save some attempts
 if not path.isfile(USED_USERNAMES_PATH):
-	open(USED_USERNAMES_PATH, "w")
+  open(USED_USERNAMES_PATH, "w")
 with open(USED_USERNAMES_PATH, "r+") as f:
   used_usernames = set([x.rstrip() for x in f.readlines()])
 
@@ -35,10 +34,8 @@ def generate_candidates(candidates, prefix, chars_left):
 
 username_candidates = generate_candidates([], "", list(argv[2]))
 
-session = HTMLSession()
 for username_candidate in username_candidates:
-  sleep(DELAY)
-  response = session.get(f"http://github.com/{username_candidate}")
+  response = requests.get(f"http://github.com/{username_candidate}")
   if response.status_code == 404:
     print(f"{username_candidate} is available.")
   else:
